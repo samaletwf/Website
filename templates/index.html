@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спектральный анализ</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script defer src="/static/app.js"></script>
+</head>
+<body>
+    <h1>Анализ спектров</h1>
+    <div class="upload-section">
+        <input type="file" id="files" multiple>
+        <button onclick="uploadFiles()">Загрузить файлы</button>
+    </div>
+
+    <div class="parameter-section">
+        <h3>Параметры обработки:</h3>
+        <label><input type="checkbox" id="remove_baseline"> Удалить базовую линию</label>
+        <label><input type="checkbox" id="apply_smoothing"> Сглаживание</label>
+        <label><input type="checkbox" id="normalize"> Нормализация</label>
+        <label><input type="checkbox" id="find_peaks"> Поиск пиков</label>
+        <br>
+        <label for="lam">λ (регуляризация):</label>
+        <input type="number" id="lam" step="100" placeholder="1000">
+        <label for="p">p (весовые коэффициенты):</label>
+        <input type="number" id="p" step="0.01" placeholder="0.001">
+        <label for="window_length">Длина окна:</label>
+        <input type="number" id="window_length" step="1" placeholder="25">
+        <label for="polyorder">Порядок полинома:</label>
+        <input type="number" id="polyorder" step="1" placeholder="2">
+    </div>
+
+    <div class="parameter-section">
+        <h3>Параметры поиска пиков:</h3>
+        <label for="peak_width">Ширина пиков:</label>
+        <input type="number" id="peak_width" step="0.1" placeholder="1">
+        <label for="peak_prominence">Значимость пиков:</label>
+        <input type="number" id="peak_prominence" step="0.1" placeholder="1">
+    </div>
+
+    <div class="parameter-section">
+        <h3>Фильтрация по частоте:</h3>
+        <label for="min_freq">Минимальная частота:</label>
+        <input type="number" id="min_freq" step="10" placeholder="0">
+        <label for="max_freq">Максимальная частота:</label>
+        <input type="number" id="max_freq" step="10" placeholder="10000">
+    </div>
+
+    <div class="actions">
+        <button onclick="processAndPlot()">Обработать и построить график</button>
+    </div>
+
+    <div id="upload_status"></div>
+    <div id="spectrum_plot"></div>
+</body>
+</html>

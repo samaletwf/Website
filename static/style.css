@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f0f8ff; /* Светло-голубой фон */
+    color: #003366; /* Темно-синий текст */
+}
+
+h1 {
+    text-align: center;
+    color: #003366;
+}
+
+.upload-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.parameter-section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #cce7ff; /* Светло-синяя рамка */
+    border-radius: 8px;
+    background-color: #e6f2ff; /* Едва заметный синий */
+}
+
+.parameter-section h3 {
+    margin-top: 0;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: #0073e6; /* Ярко-синий */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #005bb5; /* Темнее при наведении */
+}
+
+input {
+    padding: 5px;
+    border: 1px solid #cce7ff;
+    border-radius: 5px;
+}
+
+.actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#spectrum_plot {
+    margin-top: 20px;
+}
