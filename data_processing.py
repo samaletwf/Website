@@ -142,8 +142,6 @@ def filter_frequency_range(frequencies, amplitudes, min_freq, max_freq):
     filtered_frequencies = frequencies[mask]
     filtered_amplitudes = amplitudes[mask]
 
-    print(f"Фильтрованные частоты (первые 10): {filtered_frequencies[:10]}")
-    print(f"Начальная частота: {filtered_frequencies[0]}")
     return filtered_frequencies, filtered_amplitudes
 
 
