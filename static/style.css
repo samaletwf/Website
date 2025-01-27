@@ -1,58 +1,86 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f0f8ff; /* Светло-голубой фон */
-    color: #003366; /* Темно-синий текст */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9fb;
+    color: #222;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
     text-align: center;
-    color: #003366;
+    padding: 20px;
+    font-size: 2.5rem;
+    color: #4a4a8f;
+    margin: 0;
+    background: linear-gradient(to right, #7aa1f7, #c2d6ff);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.upload-section {
-    text-align: center;
-    margin-bottom: 20px;
+.main-content {
+    display: flex;
+    flex-grow: 1;
+    height: calc(100vh - 80px);
 }
 
-.parameter-section {
-    margin: 20px 0;
-    padding: 15px;
-    border: 1px solid #cce7ff; /* Светло-синяя рамка */
-    border-radius: 8px;
-    background-color: #e6f2ff; /* Едва заметный синий */
+.controls {
+    width: 300px;
+    padding: 20px;
+    background-color: #f7faff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
-.parameter-section h3 {
-    margin-top: 0;
+.controls h3 {
+    margin-bottom: 15px;
+    color: #4a4a8f;
+    font-size: 1.25rem;
 }
 
-button {
-    margin: 5px;
-    padding: 10px 15px;
-    background-color: #0073e6; /* Ярко-синий */
-    color: #fff;
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.controls input[type="number"],
+.controls input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced6e0;
+    border-radius: 4px;
+}
+
+.controls button {
+    padding: 12px 20px;
+    background-color: #4a90e2;
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    width: 100%;
 }
 
-button:hover {
-    background-color: #005bb5; /* Темнее при наведении */
+.controls button:hover {
+    background-color: #3a78c2;
 }
 
-input {
-    padding: 5px;
-    border: 1px solid #cce7ff;
-    border-radius: 5px;
-}
-
-.actions {
-    text-align: center;
-    margin-top: 20px;
+.plot-area {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
 }
 
 #spectrum_plot {
-    margin-top: 20px;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 120px);
 }
