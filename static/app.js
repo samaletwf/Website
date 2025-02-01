@@ -81,10 +81,9 @@ async function processAndPlot() {
 }
 
 
-
 function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
     const plotData = [];
-    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal'];
+    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal', 'red', 'cyan', 'yellow', 'magenta'];
 
     for (let i = 0; i < allFrequencies.length; i++) {
         plotData.push({
@@ -108,19 +107,21 @@ function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
         }
     }
 
-    Plotly.newPlot('spectrum_plot', plotData, {
+    const layout = {
         title: 'Сравнение спектров',
         xaxis: { title: 'Частота' },
         yaxis: { title: 'Амплитуда' },
-    });
+        template: document.body.classList.contains('dark-theme') ? 'plotly_dark' : 'plotly_white'
+    };
+
+    Plotly.newPlot('spectrum_plot', plotData, layout);
 }
-
-
 
 // Добавление функции для переключения темы
 document.addEventListener('DOMContentLoaded', function() {
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', function() {
         document.body.classList.toggle('dark-theme');
+        plotCombinedSpectrum(allFrequencies, allAmplitudes, []); // Перестроить график с новой темой
     });
 });
