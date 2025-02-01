@@ -81,15 +81,10 @@ async function processAndPlot() {
 }
 
 
-// Функция построения графика
-// Доступные темы
-const plotlyThemes = ["plotly_white","plotly_dark"];
-let currentTheme = "plotly_white"; // Тема по умолчанию
 
-// Обновление графика с выбранной темой
 function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
     const plotData = [];
-    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal', 'red', 'cyan', 'yellow', 'magenta'];
+    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal'];
 
     for (let i = 0; i < allFrequencies.length; i++) {
         plotData.push({
@@ -113,27 +108,19 @@ function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
         }
     }
 
-    const layout = {
+    Plotly.newPlot('spectrum_plot', plotData, {
         title: 'Сравнение спектров',
         xaxis: { title: 'Частота' },
         yaxis: { title: 'Амплитуда' },
-        template: currentTheme // Применение текущей темы
-    };
-
-    const plotElement = document.getElementById('spectrum_plot');
-    Plotly.purge(plotElement); // Удаление старого графика
-    Plotly.newPlot('spectrum_plot', plotData, layout); // Создание нового графика
+    });
 }
 
-// Обработчик изменения темы
-document.addEventListener('DOMContentLoaded', function () {
-    const themeSelector = document.getElementById('theme-selector');
-    themeSelector.addEventListener('change', function () {
-        currentTheme = themeSelector.value; // Обновляем текущую тему
-        if (allFrequencies.length && allAmplitudes.length) {
-            plotCombinedSpectrum(allFrequencies, allAmplitudes, []); // Перестраиваем график с новой темой
-        } else {
-            alert('Данные не загружены. Пожалуйста, загрузите файлы.');
-        }
+
+
+// Добавление функции для переключения темы
+document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-theme');
     });
 });
