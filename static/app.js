@@ -84,7 +84,7 @@ async function processAndPlot() {
 
 function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
     const plotData = [];
-    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal'];
+    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal', 'red', 'cyan', 'magenta'];
 
     for (let i = 0; i < allFrequencies.length; i++) {
         plotData.push({
