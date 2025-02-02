@@ -18,40 +18,48 @@
             </div>
 
             <div class="parameter-section">
-                <h3>Параметры обработки:</h3>
-                <label><input type="checkbox" id="remove_baseline"> Удалить базовую линию</label>
-                <label><input type="checkbox" id="apply_smoothing"> Сглаживание</label>
-                <label><input type="checkbox" id="normalize"> Нормализация</label>
-                <label><input type="checkbox" id="find_peaks"> Поиск пиков</label>
-                <label for="lam">λ (регуляризация):</label>
-                <input type="number" id="lam" step="100" placeholder="1000">
-
-                <label for="p">p (весовые коэффициенты):</label>
-                <input type="number" id="p" step="0.01" placeholder="0.001">
-
-                <label for="window_length">Длина окна:</label>
-                <input type="number" id="window_length" step="1" placeholder="25">
-
-                <label for="polyorder">Порядок полинома:</label>
-                <input type="number" id="polyorder" step="1" placeholder="2">
-            </div>
-
-            <div class="parameter-section">
-                <h3>Параметры поиска пиков:</h3>
-                <label for="peak_width">Ширина пиков:</label>
-                <input type="number" id="peak_width" step="0.1" placeholder="1">
-
-                <label for="peak_prominence">Значимость пиков:</label>
-                <input type="number" id="peak_prominence" step="0.1" placeholder="1">
-            </div>
-
-            <div class="parameter-section">
-                <h3>Фильтрация по частоте:</h3>
+                <h3>Функции и параметры</h3>
+                <h4>Выбор полосы частот</h4>
                 <label for="min_freq">Минимальная частота:</label>
                 <input type="number" id="min_freq" step="10" placeholder="0">
 
                 <label for="max_freq">Максимальная частота:</label>
                 <input type="number" id="max_freq" step="10" placeholder="10000">
+            </div>
+
+            <div class="parameter-section">
+                <h4>Удаление БЛ</h4>
+                <label><input type="checkbox" id="remove_baseline"> Метод BL_ALS</label>
+                <label for="lam">lam:</label>
+                <input type="number" id="lam" step="100" placeholder="1000">
+
+                <label for="p">p:</label>
+                <input type="number" id="p" step="0.01" placeholder="0.001">
+            </div>
+
+            <div class="parameter-section">
+                <h4>Нормировка</h4>
+                <label><input type="checkbox" id="normalize"> Норм. методом SNV</label>
+            </div>
+
+            <div class="parameter-section">
+                <h4>Сглаживание</h4>
+                <label><input type="checkbox" id="apply_smoothing"> Фильтр Савицкого-Голая</label>
+                <label for="window_length">wlen:</label>
+                <input type="number" id="window_length" step="1" placeholder="25">
+
+                <label for="polyorder">poly:</label>
+                <input type="number" id="polyorder" step="1" placeholder="2">
+            </div>
+
+            <div class="parameter-section">
+                <h4>Нахождение среднего</h4>
+                <label><input type="checkbox" id="find_peaks"> Поиск пиков</label>
+                <label for="peak_width">width:</label>
+                <input type="number" id="peak_width" step="0.1" placeholder="10">
+
+                <label for="peak_prominence">prom:</label>
+                <input type="number" id="peak_prominence" step="0.1" placeholder="1">
             </div>
 
             <div class="actions">
@@ -64,6 +72,6 @@
             <div id="spectrum_plot"></div>
         </div>
     </div>
-    <button id="theme-toggle">Переключить тему</button>
+    <button id="theme-toggle">Тема</button>
 </body>
 </html>

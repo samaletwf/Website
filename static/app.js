@@ -80,11 +80,9 @@ async function processAndPlot() {
     }
 }
 
-
-
 function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
     const plotData = [];
-    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal', 'red', 'cyan', 'magenta'];
+    const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal'];
 
     for (let i = 0; i < allFrequencies.length; i++) {
         plotData.push({
@@ -107,20 +105,39 @@ function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
             });
         }
     }
+    
 
-    Plotly.newPlot('spectrum_plot', plotData, {
+    const layout = {
         title: 'Сравнение спектров',
         xaxis: { title: 'Частота' },
         yaxis: { title: 'Амплитуда' },
-    });
+        plot_bgcolor: document.body.classList.contains('dark-theme') ? '#1e1e1e' : '#ffffff',
+        paper_bgcolor: document.body.classList.contains('dark-theme') ? '#1e1e1e' : '#ffffff',
+        font: {
+            color: document.body.classList.contains('dark-theme') ? '#e0e0e0' : '#222'
+        }
+    };
+
+    Plotly.newPlot('spectrum_plot', plotData, layout);
 }
 
-
+// Функция для обновления темы графика
+function updatePlotTheme() {
+    const layout = {
+        plot_bgcolor: document.body.classList.contains('dark-theme') ? '#1e1e1e' : '#ffffff',
+        paper_bgcolor: document.body.classList.contains('dark-theme') ? '#1e1e1e' : '#ffffff',
+        font: {
+            color: document.body.classList.contains('dark-theme') ? '#e0e0e0' : '#222'
+        }
+    };
+    Plotly.relayout('spectrum_plot', layout);
+}
 
 // Добавление функции для переключения темы
 document.addEventListener('DOMContentLoaded', function() {
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', function() {
         document.body.classList.toggle('dark-theme');
+        updatePlotTheme();
     });
 });

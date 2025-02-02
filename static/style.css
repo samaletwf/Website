@@ -128,3 +128,15 @@ body.dark-theme .controls input[type="file"] {
 #theme-toggle:hover {
     background-color: #3a78c2;
 }
+
+.parameter-section {
+    margin-bottom: 20px;
+}
+
+.upload-section {
+    margin-bottom: 20px;
+}
+
+.actions {
+    margin-top: 20px;
+}
