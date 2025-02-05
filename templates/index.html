@@ -9,61 +9,112 @@
     <script defer src="/static/app.js"></script>
 </head>
 <body>
-    <h1>Анализ спектров</h1>
+
+<h1>Анализ спектров</h1>
     <div class="main-content">
         <div class="controls">
             <div class="upload-section">
-                <input type="file" id="files" multiple>
-                <button onclick="uploadFiles()">Загрузить файлы</button>
+                <input type="file" id="files" multiple title="Загрузите файлы для анализа">
+                <button onclick="uploadFiles()" title="Загрузить выбранные файлы">Загрузить файлы</button>
             </div>
 
             <div class="parameter-section">
                 <h3>Функции и параметры</h3>
                 <h4>Выбор полосы частот</h4>
-                <label for="min_freq">Минимальная частота:</label>
-                <input type="number" id="min_freq" step="10" placeholder="0">
+                <div class="tooltip">
+                    <label for="min_freq">Минимальная частота:</label>
+                    <input type="number" id="min_freq" step="10" placeholder="0" title="Минимальная частота для анализа">
+                    <span class="tooltiptext">Минимальная частота для анализа</span>
+                </div>
 
-                <label for="max_freq">Максимальная частота:</label>
-                <input type="number" id="max_freq" step="10" placeholder="10000">
+                <div class="tooltip">
+                    <label for="max_freq">Максимальная частота:</label>
+                    <input type="number" id="max_freq" step="10" placeholder="10000" title="Максимальная частота для анализа">
+                    <span class="tooltiptext">Максимальная частота для анализа</span>
+                </div>
             </div>
 
             <div class="parameter-section">
                 <h4>Удаление БЛ</h4>
-                <label><input type="checkbox" id="remove_baseline"> Метод BL_ALS</label>
-                <label for="lam">lam:</label>
-                <input type="number" id="lam" step="100" placeholder="1000">
+                <div class="tooltip">
+                    <label>
+                        <input type="checkbox" id="remove_baseline" title="Удалить базовую линию с использованием метода BL_ALS">
+                        <span class="tooltiptext">Метод ALS минимизирует разницу между исходными данными и сглаженной базовой линией, при этом учитывая асимметричность ошибок. Это означает, что положительные отклонения (когда сигнал выше базовой линии) и отрицательные отклонения (когда сигнал ниже базовой линии) могут иметь разный вес. Это позволяет сохранить полезный сигнал, удаляя при этом низкочастотную базовую линию.</span>
+                        Метод BL_ALS
+                    </label>
+                </div>
+                <div class="tooltip">
+                    <label for="lam">lam:</label>
+                    <input type="number" id="lam" step="100" placeholder="1000" title="Параметр регуляризации для метода BL_ALS">
+                    <span class="tooltiptext">Это параметр регуляризации, который контролирует гладкость базовой линии. Чем больше значение lam, тем более гладкой будет базовая линия. Если lam слишком маленькое, базовая линия будет слишком близка к исходным данным, что может привести к удалению полезного сигнала. Если lam слишком большое, базовая линия будет слишком гладкой, что может привести к неполному удалению базовой линии. Условие: lam > 0.</span>
+                </div>
 
-                <label for="p">p:</label>
-                <input type="number" id="p" step="0.01" placeholder="0.001">
+                <div class="tooltip">
+                    <label for="p">p:</label>
+                    <input type="number" id="p" step="0.01" placeholder="0.001" title="Весовые коэффициенты для метода BL_ALS">
+                    <span class="tooltiptext">Это параметр, который определяет асимметричность весов. Он контролирует, насколько сильно учитываются положительные и отрицательные отклонения от базовой линии. Если p близко к 1, положительные отклонения (сигнал выше базовой линии) будут учитываться сильнее. Если p близко к 0, отрицательные отклонения (сигнал ниже базовой линии) будут учитываться сильнее. Условие: P от 0 до 1</span>
+                </div>
             </div>
+            
 
             <div class="parameter-section">
                 <h4>Нормировка</h4>
-                <label><input type="checkbox" id="normalize"> Норм. методом SNV</label>
+                <div class="tooltip">
+                    <label>
+                        <input type="checkbox" id="normalize" title="Нормализация методом SNV">
+                        <span class="tooltiptext">Нормировка SNV преобразует данные так, чтобы каждый спектр (или сигнал) имел среднее значение, равное нулю, и стандартное отклонение, равное единице. Это позволяет устранить смещение и масштабировать данные, что делает их более сравнимыми и подходящими для дальнейшего анализа.</span>
+                        Норм. методом SNV
+                    </label>
+                </div>
             </div>
 
             <div class="parameter-section">
                 <h4>Сглаживание</h4>
-                <label><input type="checkbox" id="apply_smoothing"> Фильтр Савицкого-Голая</label>
-                <label for="window_length">wlen:</label>
-                <input type="number" id="window_length" step="1" placeholder="25">
+                <div class="tooltip">
+                    <label>
+                        <input type="checkbox" id="apply_smoothing" title="Применить фильтр Савицкого-Голая">
+                        <span class="tooltiptext">Основная идея метода: Локальная аппроксимация: Сигнал разбивается на небольшие участки (окна) фиксированной длины. Для каждого окна строится полином заданного порядка, который наилучшим образом аппроксимирует данные в этом окне. Сглаживание: Значение сигнала в центре окна заменяется на значение, вычисленное по аппроксимирующему полиному. Окно перемещается по всему сигналу, и процесс повторяется.</span>
+                        Фильтр Савицкого-Голая
+                    </label>
+                </div>
+                <div class="tooltip">
+                    <label for="window_length">wlen:</label>
+                    <input type="number" id="window_length" step="1" placeholder="25" title="Длина окна для фильтра Савицкого-Голая">
+                    <span class="tooltiptext">Это размер окна, в котором происходит аппроксимация сигнала полиномом. Длина окна должна быть нечетным числом, чтобы у окна был четкий центр. Чем больше длина окна, тем сильнее сглаживание, но при этом могут теряться детали сигнала. Если длина окна слишком маленькая, сглаживание будет слабым, и шум может остаться.</span>
+                </div>
 
-                <label for="polyorder">poly:</label>
-                <input type="number" id="polyorder" step="1" placeholder="2">
+                <div class="tooltip">
+                    <label for="polyorder">poly:</label>
+                    <input type="number" id="polyorder" step="1" placeholder="2" title="Порядок полинома для фильтра Савицкого-Голая">
+                    <span class="tooltiptext">Это степень полинома, который используется для аппроксимации данных в окне. Чем выше порядок полинома, тем более сложную форму он может описать. Однако слишком высокий порядок полинома может привести к переобучению (например, к появлению артефактов или выбросов). Обычно используются полиномы низкого порядка (2, 3 или 4).</span>
+                </div>
             </div>
 
             <div class="parameter-section">
                 <h4>Нахождение среднего</h4>
-                <label><input type="checkbox" id="find_peaks"> Поиск пиков</label>
-                <label for="peak_width">width:</label>
-                <input type="number" id="peak_width" step="0.1" placeholder="10">
+                <div class="tooltip">
+                    <label>
+                        <input type="checkbox" id="find_peaks" title="Поиск пиков в спектре">
+                        <span class="tooltiptext">Поиск пиков в спектре</span>
+                        Поиск пиков
+                    </label>
+                </div>
+                <div class="tooltip">
+                    <label for="peak_width">width:</label>
+                    <input type="number" id="peak_width" step="0.1" placeholder="10" title="Ширина пиков">
+                    <span class="tooltiptext">Ширина пиков</span>
+                </div>
+                
 
-                <label for="peak_prominence">prom:</label>
-                <input type="number" id="peak_prominence" step="0.1" placeholder="1">
+                <div class="tooltip">
+                    <label for="peak_prominence">prom:</label>
+                    <input type="number" id="peak_prominence" step="0.1" placeholder="1" title="Значимость пиков">
+                    <span class="tooltiptext">Значимость пиков</span>
+                </div>
             </div>
 
             <div class="actions">
-                <button onclick="processAndPlot()">Обработать и построить график</button>
+                <button onclick="processAndPlot()" title="Обработать данные и построить график">Обработать и построить график</button>
             </div>
 
             <div id="upload_status"></div>
@@ -72,6 +123,6 @@
             <div id="spectrum_plot"></div>
         </div>
     </div>
-    <button id="theme-toggle">Тема</button>
+    <button id="theme-toggle" title="Переключить тему оформления">Переключить тему</button>
 </body>
 </html>

@@ -140,3 +140,35 @@ body.dark-theme .controls input[type="file"] {
 .actions {
     margin-top: 20px;
 }
+
+/* Стили для подсказок */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 270px; /* Уменьшена ширина в два раза */
+    background: linear-gradient(to right, #7aa1f7, #c2d6ff);
+    color: #4a4a8f;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Позиция подсказки над элементом */
+    left: 50%;
+    margin-left: -100px; /* Центрирование подсказки с учетом смещения */
+    transform: translateX(20px); /* Смещение на 40 пикселей вправо */
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: normal; /* Разрешение переноса строк */
+    word-wrap: break-word; /* Перенос длинных слов */
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
