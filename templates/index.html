@@ -89,9 +89,27 @@
                     <span class="tooltiptext">Это степень полинома, который используется для аппроксимации данных в окне. Чем выше порядок полинома, тем более сложную форму он может описать. Однако слишком высокий порядок полинома может привести к переобучению (например, к появлению артефактов или выбросов). Обычно используются полиномы низкого порядка (2, 3 или 4).</span>
                 </div>
             </div>
-
             <div class="parameter-section">
-                <h4>Нахождение среднего</h4>
+                <h4>Среднее и СКО</h4>
+                <div class="tooltip">
+                    <label>
+                        <input type="checkbox" id="calculate_mean_std" title="Рассчитать среднее и стандартное отклонение">
+                        <span class="tooltiptext">Вычисляет среднее и стандартное отклонение по всем загруженным и обработанным спектрам.</span>
+                        Среднее и СКО
+                    </label>
+                </div>
+            </div>
+            <div class="parameter-section">
+                <h4>Отображение графиков</h4>
+                <div class="tooltip">
+                    <label>
+                        <input type="checkbox" id="show_only_mean_std" title="Отображать только среднее и СКО">
+                        <span class="tooltiptext">Если выбрано, отобразятся только графики среднего и стандартного отклонения.</span>
+                        Только среднее и СКО
+                    </label>
+                </div>
+            </div>
+            <div class="parameter-section">
                 <div class="tooltip">
                     <label>
                         <input type="checkbox" id="find_peaks" title="Поиск пиков в спектре">
@@ -101,14 +119,14 @@
                 </div>
                 <div class="tooltip">
                     <label for="peak_width">width:</label>
-                    <input type="number" id="peak_width" step="0.1" placeholder="10" title="Ширина пиков">
+                    <input type="number" id="peak_width" step="10" placeholder="10" title="Ширина пиков">
                     <span class="tooltiptext">Ширина пиков</span>
                 </div>
                 
 
                 <div class="tooltip">
                     <label for="peak_prominence">prom:</label>
-                    <input type="number" id="peak_prominence" step="0.1" placeholder="1" title="Значимость пиков">
+                    <input type="number" id="peak_prominence" step="1" placeholder="1" title="Значимость пиков">
                     <span class="tooltiptext">Значимость пиков</span>
                 </div>
             </div>

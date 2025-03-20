@@ -41,6 +41,7 @@ async function processAndPlot() {
         apply_smoothing: document.getElementById('apply_smoothing').checked,
         normalize: document.getElementById('normalize').checked,
         find_peaks: document.getElementById('find_peaks').checked,
+        calculate_mean_std: document.getElementById('calculate_mean_std').checked,
         lam: parseFloat(document.getElementById('lam').value) || 1000,
         p: parseFloat(document.getElementById('p').value) || 0.001,
         window_length: parseInt(document.getElementById('window_length').value) || 25,
@@ -51,8 +52,6 @@ async function processAndPlot() {
         max_freq: parseFloat(document.getElementById('max_freq').value) || 10000,
     };
 
-    console.log("Параметры отправки:", params);
-
     try {
         const response = await fetch('/process_data', {
             method: 'POST',
@@ -62,53 +61,94 @@ async function processAndPlot() {
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error("Ответ сервера с ошибкой:", errorText);
             throw new Error(`Ошибка обработки данных: ${response.statusText}`);
         }
 
         const result = await response.json();
-        console.log("Ответ от /process_data:", result);
 
-        if (result.processed_amplitudes && Array.isArray(result.processed_amplitudes)) {
-            plotCombinedSpectrum(result.frequencies, result.processed_amplitudes, result.peaks || []);
-        } else {
-            alert(`Ошибка обработки данных: ${result.error || "Неизвестная ошибка"}`);
-        }
+        plotCombinedSpectrum(
+            result.frequencies, 
+            result.processed_amplitudes, 
+            result.peaks, 
+            result.mean_amplitude, 
+            result.std_amplitude,
+            document.getElementById('show_only_mean_std').checked  // новый параметр
+        );
+
     } catch (error) {
-        console.error("Ошибка в процессе обработки:", error);
         alert(`Ошибка при обработке данных: ${error.message || "Неизвестная ошибка"}`);
     }
 }
 
-function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
+
+function plotCombinedSpectrum(
+    allFrequencies, 
+    allAmplitudes, 
+    allPeaks, 
+    mean_amplitude, 
+    std_amplitude,
+    showOnlyMeanStd  // Новый параметр
+) {
     const plotData = [];
     const lineColors = ['blue', 'green', 'purple', 'pink', 'orange', 'teal'];
 
-    for (let i = 0; i < allFrequencies.length; i++) {
-        plotData.push({
-            x: allFrequencies[i],
-            y: allAmplitudes[i],
-            type: 'scatter',
-            mode: 'lines',
-            name: `Файл ${i + 1}`,
-            line: { color: lineColors[i % lineColors.length] }
-        });
-
-        if (allPeaks[i] && allPeaks[i].length > 0) {
+    if (!showOnlyMeanStd) {
+        // Отрисовка всех спектров и пиков, только если чекбокс не отмечен
+        for (let i = 0; i < allFrequencies.length; i++) {
             plotData.push({
-                x: allPeaks[i].map(index => allFrequencies[i][index]),
-                y: allPeaks[i].map(index => allAmplitudes[i][index]),
+                x: allFrequencies[i],
+                y: allAmplitudes[i],
                 type: 'scatter',
-                mode: 'markers',
-                name: `Пики файла ${i + 1}`,
-                marker: { color: lineColors[i % lineColors.length], size: 8 }
+                mode: 'lines',
+                name: `Файл ${i + 1}`,
+                line: { color: lineColors[i % lineColors.length] }
             });
+
+            if (allPeaks[i] && allPeaks[i].length > 0) {
+                plotData.push({
+                    x: allPeaks[i].map(index => allFrequencies[i][index]),
+                    y: allPeaks[i].map(index => allAmplitudes[i][index]),
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: `Пики файла ${i + 1}`,
+                    marker: { color: lineColors[i % lineColors.length], size: 8 }
+                });
+            }
         }
     }
-    
+
+    // Отрисовка среднего и СКО, если они рассчитаны
+    if(mean_amplitude && mean_amplitude.length > 0 && std_amplitude.length > 0) {
+        plotData.push(
+            {
+                x: allFrequencies[0],
+                y: mean_amplitude,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Среднее значение',
+                line: { color: 'red', width: 3 }
+            },
+            {
+                x: allFrequencies[0],
+                y: mean_amplitude.map((m, i) => m + std_amplitude[i]),
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Среднее + 1σ',
+                line: { color: 'orange', width: 2, dash: 'dot' }
+            },
+            {
+                x: allFrequencies[0],
+                y: mean_amplitude.map((m, i) => m - std_amplitude[i]),
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Среднее - 1σ',
+                line: { color: 'orange', width: 2, dash: 'dot' }
+            }
+        );
+    }
 
     const layout = {
-        title: 'Сравнение спектров',
+        title: showOnlyMeanStd ? 'Среднее и СКО спектров' : 'Сравнение спектров',
         xaxis: { title: 'Частота' },
         yaxis: { title: 'Амплитуда' },
         plot_bgcolor: document.body.classList.contains('dark-theme') ? '#1e1e1e' : '#ffffff',
@@ -120,6 +160,7 @@ function plotCombinedSpectrum(allFrequencies, allAmplitudes, allPeaks) {
 
     Plotly.newPlot('spectrum_plot', plotData, layout);
 }
+
 
 // Функция для обновления темы графика
 function updatePlotTheme() {

@@ -144,4 +144,15 @@ def filter_frequency_range(frequencies, amplitudes, min_freq, max_freq):
 
     return filtered_frequencies, filtered_amplitudes
 
+def calculate_mean_std(amplitudes_list):
+    """
+    Вычисляет среднее и стандартное отклонение для списка амплитуд.
+    :param amplitudes_list: список массивов амплитуд
+    :return: среднее и стандартное отклонение
+    """
+    amplitudes_array = np.array(amplitudes_list)
+    mean_amplitude = np.mean(amplitudes_array, axis=0)
+    std_amplitude = np.std(amplitudes_array, axis=0)
+
+    return mean_amplitude, std_amplitude
 

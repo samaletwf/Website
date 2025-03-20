@@ -7,7 +7,8 @@ from data_processing import (
     normalize_snv,
     find_signal_peaks,
     filter_frequency_range,
-    parse_esp_file
+    parse_esp_file,
+    calculate_mean_std 
 )
 
 # Инициализация Flask приложения
@@ -103,6 +104,7 @@ def process_data():
         apply_smoothing = data.get('apply_smoothing', False)
         normalize = data.get('normalize', False)
         find_peaks_flag = data.get('find_peaks', False)
+        calculate_mean_std_flag = data.get('calculate_mean_std', False)
         width = data.get('width', 1)
         prominence = data.get('prominence', 1)
 
@@ -141,13 +143,20 @@ def process_data():
             peaks_list.append(peaks.tolist() if len(peaks) > 0 else [])
             peaks_values_list.append(peaks_values.tolist() if len(peaks_values) > 0 else [])
 
-        # Возвращаем JSON-ответ
+        mean_amplitude, std_amplitude = [], []
+        if calculate_mean_std_flag and len(allAmplitudes) > 0:
+            mean_amplitude, std_amplitude = calculate_mean_std(allAmplitudes)
+        
+
         return jsonify({
             'frequencies': [f.tolist() for f in allFrequencies],
             'processed_amplitudes': [a.tolist() for a in allAmplitudes],
             'peaks': peaks_list,
-            'peaks_values': peaks_values_list
+            'peaks_values': peaks_values_list,
+            'mean_amplitude': mean_amplitude.tolist() if len(mean_amplitude) > 0 else [],
+            'std_amplitude': std_amplitude.tolist() if len(std_amplitude) > 0 else []
         })
+
     except Exception as e:
         print(f"Ошибка обработки данных: {str(e)}")
         return jsonify({'error': f"Ошибка обработки данных: {str(e)}"}), 400
