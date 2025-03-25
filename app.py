@@ -8,7 +8,8 @@ from data_processing import (
     find_signal_peaks,
     filter_frequency_range,
     parse_esp_file,
-    calculate_mean_std 
+    calculate_mean_std, 
+    calculate_boxplot_stats
 )
 
 # Инициализация Flask приложения
@@ -104,9 +105,11 @@ def process_data():
         apply_smoothing = data.get('apply_smoothing', False)
         normalize = data.get('normalize', False)
         find_peaks_flag = data.get('find_peaks', False)
+        calculate_boxplot_flag = data.get('calculate_boxplot', False)
         calculate_mean_std_flag = data.get('calculate_mean_std', False)
         width = data.get('width', 1)
         prominence = data.get('prominence', 1)
+        
 
         # Обработка данных
         allFrequencies = []
@@ -137,6 +140,11 @@ def process_data():
                 peaks, _ = find_signal_peaks(amplitudes, width=width, prominence=prominence)
                 peaks_values = amplitudes[peaks] if len(peaks) > 0 else []
 
+            boxplot_stats = []
+            if data.get('calculate_boxplot', False) and len(allAmplitudes) > 0:
+                boxplot_stats = calculate_boxplot_stats(allAmplitudes)
+
+
             # Сохраняем результаты
             allFrequencies.append(frequencies)
             allAmplitudes.append(amplitudes)
@@ -154,7 +162,9 @@ def process_data():
             'peaks': peaks_list,
             'peaks_values': peaks_values_list,
             'mean_amplitude': mean_amplitude.tolist() if len(mean_amplitude) > 0 else [],
+            'boxplot_stats': boxplot_stats,
             'std_amplitude': std_amplitude.tolist() if len(std_amplitude) > 0 else []
+            
         })
 
     except Exception as e:

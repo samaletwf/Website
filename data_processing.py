@@ -2,8 +2,38 @@ import numpy as np
 from scipy.signal import savgol_filter, find_peaks
 from scipy.sparse.linalg import spsolve
 from scipy import sparse
-
-
+# усекии))
+def calculate_boxplot_stats(amplitudes_list):
+    """
+    Вычисляет статистику для построения box plot (ящика с усами)
+    :param amplitudes_list: список массивов амплитуд
+    :return: список словарей с статистикой для каждого набора амплитуд
+    """
+    boxplot_stats = []
+    for amplitudes in amplitudes_list:
+        if len(amplitudes) == 0:
+            continue
+            
+        q1 = np.percentile(amplitudes, 25)
+        median = np.percentile(amplitudes, 50)
+        q3 = np.percentile(amplitudes, 75)
+        iqr = q3 - q1
+        lower_bound = q1 - 1.5 * iqr
+        upper_bound = q3 + 1.5 * iqr
+        
+        # Находим выбросы
+        outliers = amplitudes[(amplitudes < lower_bound) | (amplitudes > upper_bound)]
+        
+        boxplot_stats.append({
+            'q1': q1,
+            'median': median,
+            'q3': q3,
+            'lower_bound': lower_bound,
+            'upper_bound': upper_bound,
+            'outliers': outliers.tolist() if len(outliers) > 0 else []
+        })
+    
+    return boxplot_stats
 
 def parse_esp_file(file_content):
     """
@@ -156,3 +186,36 @@ def calculate_mean_std(amplitudes_list):
 
     return mean_amplitude, std_amplitude
 
+def calculate_boxplot_stats(amplitudes_list):
+    """
+    Вычисляет статистику для построения box plot (ящика с усами)
+    :param amplitudes_list: список массивов амплитуд
+    :return: список словарей с статистикой для каждого набора амплитуд
+    """
+    import numpy as np
+    
+    boxplot_stats = []
+    for amplitudes in amplitudes_list:
+        if len(amplitudes) == 0:
+            continue
+            
+        q1 = np.percentile(amplitudes, 25)
+        median = np.percentile(amplitudes, 50)
+        q3 = np.percentile(amplitudes, 75)
+        iqr = q3 - q1
+        lower_bound = q1 - 1.5 * iqr
+        upper_bound = q3 + 1.5 * iqr
+        
+        # Находим выбросы
+        outliers = amplitudes[(amplitudes < lower_bound) | (amplitudes > upper_bound)]
+        
+        boxplot_stats.append({
+            'q1': q1,
+            'median': median,
+            'q3': q3,
+            'lower_bound': lower_bound,
+            'upper_bound': upper_bound,
+            'outliers': outliers.tolist() if len(outliers) > 0 else []
+        })
+    
+    return boxplot_stats
